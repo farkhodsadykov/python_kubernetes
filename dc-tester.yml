@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fscoding
+  labels:
+    app: fscoding
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  selector:
+    app: fscoding
+  type: LoadBalancer
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: fscoding
+  labels:
+    app: fscoding
+spec:
+  selector:
+    matchLabels:
+      app: fscoding
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: fscoding
+    spec:
+      containers:
+      - image: fsadykov/dc-test
+        name: fscoding
+        ports:
+        - containerPort: 5000
+          name: fscoding
